@@ -1,5 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
+
+import { ErrorMessagesEnum } from 'src/core/enums/error-messages.enum';
 import { ConfigSchema } from 'src/core/lib/config/config.schema';
 
 const nodeEnv = process.env.NODE_ENV;
@@ -10,9 +12,14 @@ const configFilePath = `${nodeConfigDir}/${confFile}`;
 
 export default () => {
   const config = JSON.parse(fs.readFileSync(path.join(configFilePath), 'utf8'));
-  const result = ConfigSchema.validate(config, { allowUnknown: false, abortEarly: false });
+  const result = ConfigSchema.validate(config, {
+    allowUnknown: false,
+    abortEarly: false,
+  });
   if (result.error) {
-    throw new Error(`Config file is no match to Schema: ${JSON.stringify(result.error.message)}`);
+    throw new Error(
+      ErrorMessagesEnum.CONFIG + JSON.stringify(result.error.message),
+    );
   }
   return config;
 };

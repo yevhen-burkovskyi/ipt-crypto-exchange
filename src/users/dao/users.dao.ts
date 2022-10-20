@@ -1,10 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 
 import { UserEntity } from 'src/core/entities/user.entity';
 import { RegistrationDtoWithUserSalt } from 'src/users/services/types/registration-dto-with-user-salt.type';
-import { LoginDto } from 'src/users/controllers/dto/login.dto';
+import { LoginDto } from 'src/users/dto/login.dto';
+import { UserStatusesEnum } from 'src/core/enums/user-statuses.enum';
+import { VerifyUserRoleDto } from '../dtos/dto/verify-user-role.dto';
+import { PersonalInformationDto } from '../dtos/dto/personal-information.dto';
 
 @Injectable()
 export class UsersDao {
@@ -34,5 +37,40 @@ export class UsersDao {
 
   async login(payload: LoginDto): Promise<UserEntity> {
     return this.usersRepository.findOne({ where: payload });
+  }
+
+  async verifyUserRole(payload: VerifyUserRoleDto): Promise<boolean> {
+    const count = await this.usersRepository.count({
+      where: {
+        id: payload.userId,
+        role: {
+          name: In(payload.roleName),
+        },
+      },
+    });
+    return count >= 1;
+  }
+
+  async getUserStatusById(userId: string): Promise<UserStatusesEnum> {
+    const user = await this.usersRepository.findOne({
+      where: { id: userId },
+      select: ['status'],
+    });
+    return user.status;
+  }
+
+  async setUserPersonalInformation(
+    payload: PersonalInformationDto,
+    userId: string,
+  ): Promise<void> {
+    const newUserStatus = UserStatusesEnum.EMAIL_VERIFICATION;
+    await this.usersRepository.update(
+      { id: userId },
+      { profile: payload, status: newUserStatus },
+    );
+  }
+
+  async getUserByUserId(userId: string): Promise<UserEntity> {
+    return this.usersRepository.findOne({ where: { id: userId } });
   }
 }

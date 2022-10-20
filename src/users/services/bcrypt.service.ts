@@ -1,7 +1,8 @@
 import { hash, genSalt } from 'bcrypt';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { EncryptResponse } from 'src/users/services/responses/encrypt.response';
+
+import { EncryptResponse } from 'src/users/dtos/responses/encrypt.response';
 
 @Injectable()
 export class BcryptService {

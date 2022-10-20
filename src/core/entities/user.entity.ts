@@ -1,5 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { UserStatusesEnum } from 'src/core/enums/user-statuses.enum';
+import { RolesEntity } from './roles.entity';
 
 @Entity({
   name: 'users',
@@ -36,4 +37,7 @@ export class UserEntity {
 
   @Column()
   userSalt: string;
+
+  @ManyToOne(() => RolesEntity, (role) => role.users)
+  role: RolesEntity;
 }

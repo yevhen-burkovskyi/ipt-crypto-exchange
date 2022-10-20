@@ -5,6 +5,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { DatabaseNames } from 'src/core/enums/db.enum';
 import { UsersModule } from 'src/users/users.module';
 import { AuthModule } from 'src/auth/auth.module';
+import { RolesModule } from 'src/roles/roles.module';
+import migrations from 'src/core/migrations/migrations.list';
 import configuration from 'src/core/lib/config/init';
 
 @Module({
@@ -27,10 +29,13 @@ import configuration from 'src/core/lib/config/init';
           configService.get('database.autoLoadEntities')
         ),
         synchronize: <boolean>configService.get('database.synchronize'),
+        migrationsRun: configService.get('database.migrationsRun'),
+        migrations,
       }),
     }),
     UsersModule,
     AuthModule,
+    RolesModule,
   ],
 })
 export class AppModule {}

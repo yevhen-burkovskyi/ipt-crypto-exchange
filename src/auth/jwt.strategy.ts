@@ -7,10 +7,14 @@ import { RequestWithUserContextType } from 'src/core/types/request-with-user-con
 import { JwtValidationResultDto } from 'src/auth/dto/jwt-validation-result.dto';
 import { TokenBodyDto } from 'src/users/services/dto/token-body.dto';
 import { ErrorMessagesEnum } from 'src/core/enums/error-messages.enum';
+import { UsersManager } from 'src/users/managers/users.manager';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(private readonly configService: ConfigService) {
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly usersManager: UsersManager,
+  ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
@@ -27,8 +31,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       isValid: false,
     };
     try {
-      req.userContext = { userId: decodedJwt.userId };
-      if (req.userContext.userId) {
+      const userId = decodedJwt.userId;
+      if (userId) {
+        const userStatus = await this.usersManager.getUserStatusById(userId);
+        req.userContext = { userId, userStatus };
         jwtValidationResult.isValid = true;
       }
     } catch (e) {

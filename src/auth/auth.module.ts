@@ -5,6 +5,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 
 import { JwtStrategy } from 'src/auth/jwt.strategy';
 import { JwtAuthGuard } from 'src/auth/jwt.guard';
+import { UsersModule } from 'src/users/users.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { JwtAuthGuard } from 'src/auth/jwt.guard';
         verifyOptions: { algorithms: ['HS256'] },
       }),
     }),
+    UsersModule,
   ],
   providers: [JwtStrategy, JwtAuthGuard],
 })

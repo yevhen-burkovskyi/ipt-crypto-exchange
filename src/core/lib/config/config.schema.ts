@@ -16,6 +16,7 @@ export const ConfigSchema = Joi.object({
     database: Joi.string().required(),
     autoLoadEntities: Joi.boolean().required(),
     synchronize: Joi.boolean().required(),
+    migrationsRun: Joi.boolean().required(),
   }).required(),
   security: Joi.object({
     saltRounds: Joi.number().required(),

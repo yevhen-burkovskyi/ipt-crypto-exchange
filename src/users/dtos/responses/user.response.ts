@@ -1,6 +1,5 @@
 import { UserEntity } from 'src/core/entities/user.entity';
 
-export interface RegistrationResponse {
+export interface UserResponse {
   user: UserEntity;
-  token: string;
 }

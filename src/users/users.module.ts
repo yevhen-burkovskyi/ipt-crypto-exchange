@@ -10,6 +10,7 @@ import { TokenService } from 'src/users/services/token.service';
 import { UsersController } from 'src/users/controllers/users.controller';
 import { UsersDao } from 'src/users/dao/users.dao';
 import { UsersManager } from 'src/users/managers/users.manager';
+import { RolesModule } from 'src/roles/roles.module';
 
 @Module({
   imports: [
@@ -24,8 +25,10 @@ import { UsersManager } from 'src/users/managers/users.manager';
         signOptions: { expiresIn: configService.get('jwt.expiresIn') },
       }),
     }),
+    RolesModule,
   ],
   controllers: [UsersController],
   providers: [UsersSerice, BcryptService, TokenService, UsersDao, UsersManager],
+  exports: [UsersManager],
 })
 export class UsersModule {}

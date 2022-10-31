@@ -4,4 +4,5 @@ export enum ErrorMessagesEnum {
   JOI = 'The expected request body does not match the received one',
   UNIQUE_EMAIL = 'This email already exists',
   LOGIN = 'Password or email are incorrect',
+  EMAIL = "Can't send email",
 }

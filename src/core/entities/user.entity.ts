@@ -1,6 +1,7 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+
 import { UserStatusesEnum } from 'src/core/enums/user-statuses.enum';
-import { RolesEntity } from './roles.entity';
+import { RolesEntity } from 'src/core/entities/roles.entity';
 
 @Entity({
   name: 'users',

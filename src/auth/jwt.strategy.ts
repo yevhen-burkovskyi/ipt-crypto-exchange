@@ -5,7 +5,7 @@ import { ConfigService } from '@nestjs/config';
 
 import { RequestWithUserContextType } from 'src/core/types/request-with-user-context.type';
 import { JwtValidationResultDto } from 'src/auth/dto/jwt-validation-result.dto';
-import { TokenBodyDto } from 'src/users/services/dto/token-body.dto';
+import { TokenBodyDto } from 'src/users/dtos/dto/token-body.dto';
 import { ErrorMessagesEnum } from 'src/core/enums/error-messages.enum';
 import { UsersManager } from 'src/users/managers/users.manager';
 

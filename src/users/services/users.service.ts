@@ -12,6 +12,8 @@ import { VerifyUserRoleDto } from 'src/users/dtos/dto/verify-user-role.dto';
 import { UserStatusesEnum } from 'src/core/enums/user-statuses.enum';
 import { PersonalInformationDto } from 'src/users/dtos/dto/personal-information.dto';
 import { UserResponse } from 'src/users/dtos/responses/user.response';
+import { SendEmailConfirmationDto } from 'src/smtp/dtos/dto/send-email-confirmation.dto';
+import { TokenBodyDto } from 'src/users/dtos/dto/token-body.dto';
 
 @Injectable()
 export class UsersSerice {
@@ -72,5 +74,21 @@ export class UsersSerice {
   async getUserByUserId(userId: string): Promise<UserResponse> {
     const user = await this.usersDao.getUserByUserId(userId);
     return { user };
+  }
+
+  async createSendEmailConfirmationPayload(
+    userId: string,
+  ): Promise<SendEmailConfirmationDto> {
+    const userEmail = await this.usersDao.getUserEmailByUserId(userId);
+    const token = this.tokenService.createEmailApproveToken(userId);
+    return { userEmail, token };
+  }
+
+  async getUserDataFromApproveToken(token: string): Promise<TokenBodyDto> {
+    return this.tokenService.decryptEmailApproveToken(token);
+  }
+
+  async activateUserEmail(userId: string): Promise<void> {
+    return this.usersDao.activateUserEmail(userId);
   }
 }

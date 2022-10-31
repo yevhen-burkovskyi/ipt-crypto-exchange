@@ -34,8 +34,8 @@ import configuration from 'src/core/lib/config/init';
       }),
     }),
     UsersModule,
-    AuthModule,
     RolesModule,
+    AuthModule,
   ],
 })
 export class AppModule {}

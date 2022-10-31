@@ -1,4 +1,5 @@
 import * as Joi from 'joi';
+
 import { DatabaseNames } from 'src/core/enums/db.enum';
 
 export const ConfigSchema = Joi.object({
@@ -25,5 +26,19 @@ export const ConfigSchema = Joi.object({
   jwt: Joi.object({
     secret: Joi.string().required(),
     expiresIn: Joi.string().required(),
+    emailApproveSecret: Joi.string().required(),
   }).required(),
+  nodemailer: Joi.object({
+    user: Joi.string().required(),
+    password: Joi.string().required(),
+  }),
+  redis: Joi.object({
+    server: Joi.string().required(),
+    port: Joi.number().required(),
+    db: Joi.number().required(),
+    auth: Joi.string().required(),
+  }).required(),
+  timeouts: Joi.object({
+    emailConfirm: Joi.number().required(),
+  }),
 });

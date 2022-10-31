@@ -11,6 +11,8 @@ import { UsersController } from 'src/users/controllers/users.controller';
 import { UsersDao } from 'src/users/dao/users.dao';
 import { UsersManager } from 'src/users/managers/users.manager';
 import { RolesModule } from 'src/roles/roles.module';
+import { SmtpModule } from 'src/smtp/smtp.module';
+import { CustomCacheModule } from 'src/cache/cache.module';
 
 @Module({
   imports: [
@@ -26,6 +28,8 @@ import { RolesModule } from 'src/roles/roles.module';
       }),
     }),
     RolesModule,
+    SmtpModule,
+    CustomCacheModule,
   ],
   controllers: [UsersController],
   providers: [UsersSerice, BcryptService, TokenService, UsersDao, UsersManager],

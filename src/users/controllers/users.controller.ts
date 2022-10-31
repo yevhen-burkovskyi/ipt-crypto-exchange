@@ -1,10 +1,12 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Patch,
   Post,
+  Query,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
@@ -31,6 +33,10 @@ import { UserResponse } from 'src/users/dtos/responses/user.response';
 import { PersonalInformationDto } from 'src/users/dtos/dto/personal-information.dto';
 import { LoginDto } from 'src/users/dtos/dto/login.dto';
 import { RegistrationDto } from 'src/users/dtos/dto/registration.dto';
+import { CommonResponseDto } from 'src/core/dto/common-response.dto';
+import { SendEmailTimeout } from 'src/core/guards/email-timeout.guard';
+import { ApproveEmailSchema } from 'src/users/dtos/schemas/approve-email.schema';
+import { ApproveEmailDto } from 'src/users/dtos/dto/approve-email.dto';
 
 @Controller(MainRoutingEnum.USERS)
 @UseInterceptors(UsersInterceptor)
@@ -72,5 +78,22 @@ export class UsersController {
       userContext.userId,
     );
     return this.usersManager.getUserByUserId(userContext.userId);
+  }
+
+  @SetRole(RolesEnum.USER)
+  @SetUserStatus(UserStatusesEnum.EMAIL_VERIFICATION)
+  @UseGuards(RolesGuard, UserStatusesGuard, SendEmailTimeout)
+  @Get('send-email-approve')
+  async sendEmailApprove(@Context() userContext: UserContext): Promise<CommonResponseDto> {
+    return this.usersManager.sendEmailApprove(userContext.userId);
+  }
+
+  @Public()
+  @Get('approve-email')
+  async approveEmail(
+    @Query(new SchemaValidatePipe(ApproveEmailSchema))
+    approveEmailDto: ApproveEmailDto,
+  ) {
+    return this.usersManager.activateUserEmail(approveEmailDto);
   }
 }

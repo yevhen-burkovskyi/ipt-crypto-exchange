@@ -3,9 +3,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { DatabaseNames } from 'src/core/enums/db.enum';
-import { UsersModule } from 'src/users/users.module';
-import { AuthModule } from 'src/auth/auth.module';
-import { RolesModule } from 'src/roles/roles.module';
+import { UsersModule } from 'src/domains/users/users.module';
+import { AuthModule } from 'src/modules/auth/auth.module';
+import { FileUploadsModule } from 'src/domains/file-uploads/file-uploads.module';
 import migrations from 'src/core/migrations/migrations.list';
 import configuration from 'src/core/lib/config/init';
 
@@ -34,7 +34,7 @@ import configuration from 'src/core/lib/config/init';
       }),
     }),
     UsersModule,
-    RolesModule,
+    FileUploadsModule,
     AuthModule,
   ],
 })

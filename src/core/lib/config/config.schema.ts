@@ -41,4 +41,8 @@ export const ConfigSchema = Joi.object({
   timeouts: Joi.object({
     emailConfirm: Joi.number().required(),
   }),
+  freeimage: Joi.object({
+    key: Joi.string().required(),
+    requestUrl: Joi.string().required(),
+  }),
 });

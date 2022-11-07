@@ -1,6 +1,6 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 
-import { CacheManager } from 'src/cache/managers/cache.manager';
+import { CacheManager } from 'src/modules/cache/managers/cache.manager';
 import { RequestWithUserContextType } from 'src/core/types/request-with-user-context.type';
 
 @Injectable()

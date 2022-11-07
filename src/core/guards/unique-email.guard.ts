@@ -5,19 +5,19 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 
-import { UsersDao } from 'src/users/dao/users.dao';
 import { ErrorMessagesEnum } from 'src/core/enums/error-messages.enum';
+import { UsersManager } from 'src/domains/users/managers/users.manager';
 
 @Injectable()
 export class UniqueEmailGuard implements CanActivate {
-  constructor(private readonly usersDao: UsersDao) {}
+  constructor(private readonly usersManager: UsersManager) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     const email = request?.body?.email;
 
     if (email) {
-      const isEmailExists = await this.usersDao.isEmailExists(email);
+      const isEmailExists = await this.usersManager.isEmailExists(email);
       if (!isEmailExists) {
         return true;
       }

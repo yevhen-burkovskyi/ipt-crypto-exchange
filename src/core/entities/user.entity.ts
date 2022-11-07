@@ -1,7 +1,14 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 import { UserStatusesEnum } from 'src/core/enums/user-statuses.enum';
 import { RolesEntity } from 'src/core/entities/roles.entity';
+import { FileUploadsEntity } from 'src/core/entities/file-uploads.entity';
 
 @Entity({
   name: 'users',
@@ -41,4 +48,7 @@ export class UserEntity {
 
   @ManyToOne(() => RolesEntity, (role) => role.users)
   role: RolesEntity;
+
+  @OneToMany(() => FileUploadsEntity, (fileUpload) => fileUpload.user)
+  fileUploads: FileUploadsEntity[];
 }

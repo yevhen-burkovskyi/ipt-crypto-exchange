@@ -1,5 +1,9 @@
 import { PipeTransform, Injectable, ForbiddenException } from '@nestjs/common';
-import { OneMb, FileNameLength, FileMimeTypes } from '../consts/file.consts';
+import {
+  OneMb,
+  FileNameLength,
+  FileMimeTypes,
+} from 'src/core/consts/file.consts';
 
 @Injectable()
 export class FileValidationPipe implements PipeTransform {

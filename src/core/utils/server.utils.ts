@@ -1,5 +1,7 @@
 import { HttpStatus } from '@nestjs/common';
+import { generate } from 'generate-password';
 
+import { PasswordParams } from 'src/core/consts/managers.consts';
 import { BasicResponse } from 'src/core/utils/dtos/responses/basic.response';
 
 export class ServerUtils {
@@ -8,5 +10,9 @@ export class ServerUtils {
     statusCode: HttpStatus,
   ): BasicResponse {
     return { message, statusCode };
+  }
+
+  static generateManagerPassword(): string {
+    return generate(PasswordParams);
   }
 }

@@ -31,7 +31,7 @@ export const ConfigSchema = Joi.object({
   nodemailer: Joi.object({
     user: Joi.string().required(),
     password: Joi.string().required(),
-  }),
+  }).required(),
   redis: Joi.object({
     server: Joi.string().required(),
     port: Joi.number().required(),
@@ -40,9 +40,9 @@ export const ConfigSchema = Joi.object({
   }).required(),
   timeouts: Joi.object({
     emailConfirm: Joi.number().required(),
-  }),
-  freeimage: Joi.object({
-    key: Joi.string().required(),
-    requestUrl: Joi.string().required(),
-  }),
-});
+  }).required(),
+  admin: Joi.object({
+    email: Joi.string().required(),
+    password: Joi.string().required(),
+  }).required(),
+}).required();

@@ -20,6 +20,9 @@ import { RegistrationDtoWithUserSalt } from 'src/domains/users/dtos/types/regist
 import { TokenManager } from 'src/modules/token/managers/token.managers';
 import { SendEmailConfirmationDto } from 'src/modules/smtp/dtos/dto/send-email-confirmation.dto';
 import { BasicResponse } from 'src/core/utils/dtos/responses/basic.response';
+import { UsersResponse } from 'src/domains/users/dtos/responses/users.response';
+import { Pagination } from 'src/core/types/pagination.type';
+import { ApproveUsersIdentityDto } from 'src/domains/users/dtos/dto/approve-users-identity.dto';
 
 @Injectable()
 export class UsersManager {
@@ -111,5 +114,22 @@ export class UsersManager {
 
   async isEmailExists(email: string): Promise<boolean> {
     return this.usersService.isEmailExists(email);
+  }
+
+  async getWaitingUsersForApprove(payload: Pagination): Promise<UsersResponse> {
+    const users = await this.usersService.getWaitingUsersForApprove(payload);
+    return { users };
+  }
+
+  async approveUsersIdentity(
+    payload: ApproveUsersIdentityDto,
+  ): Promise<BasicResponse> {
+    await this.usersService.approveUsersById(payload);
+    const userEmails = await this.usersService.getUserEmailsByIds(payload);
+    this.smtpManager.sendEmailToUsersThatBeenApproved(userEmails);
+    return ServerUtils.createCommonResponse(
+      UserResponsesEnum.USERS_APPROVED,
+      HttpStatus.OK,
+    );
   }
 }

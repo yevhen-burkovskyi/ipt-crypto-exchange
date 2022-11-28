@@ -8,6 +8,8 @@ import { VerifyUserRoleDto } from 'src/domains/users/dtos/dto/verify-user-role.d
 import { UserStatusesEnum } from 'src/core/enums/user-statuses.enum';
 import { PersonalInformationDto } from 'src/domains/users/dtos/dto/personal-information.dto';
 import { UserEntity } from 'src/core/entities/user.entity';
+import { Pagination } from 'src/core/types/pagination.type';
+import { ApproveUsersIdentityDto } from 'src/domains/users/dtos/dto/approve-users-identity.dto';
 
 @Injectable()
 export class UsersSerice {
@@ -63,5 +65,22 @@ export class UsersSerice {
   async isEmailExists(email: string): Promise<boolean> {
     const emailsCount = await this.usersDao.countEmails(email);
     return emailsCount >= 1;
+  }
+
+  async getWaitingUsersForApprove(payload: Pagination): Promise<UserEntity[]> {
+    return this.usersDao.getWaitingUsersForApprove(payload);
+  }
+
+  async approveUsersById(payload: ApproveUsersIdentityDto): Promise<void> {
+    return this.usersDao.approveUsersById(payload);
+  }
+
+  async getUserEmailsByIds(
+    payload: ApproveUsersIdentityDto,
+  ): Promise<string[]> {
+    const users = await this.usersDao.getUserEmailsByIds(payload);
+    return users.map((objWithEmail: { email: string }) => {
+      return objWithEmail.email;
+    });
   }
 }

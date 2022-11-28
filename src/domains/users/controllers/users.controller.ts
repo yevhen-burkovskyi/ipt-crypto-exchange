@@ -37,6 +37,11 @@ import { SendEmailTimeout } from 'src/core/guards/email-timeout.guard';
 import { ApproveEmailSchema } from 'src/domains/users/dtos/schemas/approve-email.schema';
 import { ApproveEmailDto } from 'src/domains/users/dtos/dto/approve-email.dto';
 import { BasicResponse } from 'src/core/utils/dtos/responses/basic.response';
+import { GetWaitingUsersForApproveSchema } from 'src/domains/users/dtos/schemas/get-waiting-users-for-approve.schema';
+import { Pagination } from 'src/core/types/pagination.type';
+import { UsersResponse } from 'src/domains/users/dtos/responses/users.response';
+import { ApproveUsersIdentitySchema } from 'src/domains/users/dtos/schemas/approve-users-identity.schema';
+import { ApproveUsersIdentityDto } from 'src/domains/users/dtos/dto/approve-users-identity.dto';
 
 @Controller(MainRoutingEnum.USERS)
 @UseInterceptors(UsersInterceptor)
@@ -95,7 +100,29 @@ export class UsersController {
   async approveEmail(
     @Query(new SchemaValidatePipe(ApproveEmailSchema))
     approveEmailDto: ApproveEmailDto,
-  ) {
+  ): Promise<UserResponse> {
     return this.usersManager.activateUserEmail(approveEmailDto);
+  }
+
+  @SetRole(RolesEnum.ADMIN, RolesEnum.MANAGER)
+  @SetUserStatus(UserStatusesEnum.ACTIVE)
+  @UseGuards(RolesGuard, UserStatusesGuard)
+  @Get('get-waiting-users-for-approve')
+  async getWaitingUsersForApprove(
+    @Query(new SchemaValidatePipe(GetWaitingUsersForApproveSchema))
+    pagination: Pagination,
+  ): Promise<UsersResponse> {
+    return this.usersManager.getWaitingUsersForApprove(pagination);
+  }
+
+  @SetRole(RolesEnum.ADMIN, RolesEnum.MANAGER)
+  @SetUserStatus(UserStatusesEnum.ACTIVE)
+  @UseGuards(RolesGuard, UserStatusesGuard)
+  @Post('approve-users-identity')
+  async approveUsersIdentity(
+    @Body(new SchemaValidatePipe(ApproveUsersIdentitySchema))
+    approveUsersIdentityDto: ApproveUsersIdentityDto,
+  ): Promise<BasicResponse> {
+    return this.usersManager.approveUsersIdentity(approveUsersIdentityDto);
   }
 }

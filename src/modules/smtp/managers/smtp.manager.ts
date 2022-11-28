@@ -35,4 +35,18 @@ export class SmtpManager {
     };
     return this.smtpService.sendEmail(sendEmailDto);
   }
+
+  async sendEmailToUsersThatBeenApproved(userEmails: string[]): Promise<void> {
+    let sendEmailDto: SendEmailDto;
+
+    userEmails.forEach((email: string) => {
+      sendEmailDto = {
+        to: email,
+        subject: EmailSubjectsEnum.ACCOUNT_APPROVED,
+        text: EmailTemplatesEnum.ACCOUNT_APPROVED,
+      };
+
+      this.smtpService.sendEmail(sendEmailDto);
+    });
+  }
 }

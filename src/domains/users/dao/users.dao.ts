@@ -8,6 +8,8 @@ import { LoginDto } from 'src/domains/users/dtos/dto/login.dto';
 import { UserStatusesEnum } from 'src/core/enums/user-statuses.enum';
 import { VerifyUserRoleDto } from 'src/domains/users/dtos/dto/verify-user-role.dto';
 import { PersonalInformationDto } from 'src/domains/users/dtos/dto/personal-information.dto';
+import { Pagination } from 'src/core/types/pagination.type';
+import { ApproveUsersIdentityDto } from 'src/domains/users/dtos/dto/approve-users-identity.dto';
 
 @Injectable()
 export class UsersDao {
@@ -87,5 +89,28 @@ export class UsersDao {
       { id: userId },
       { status: newUserStatus },
     );
+  }
+
+  async getWaitingUsersForApprove(payload: Pagination): Promise<UserEntity[]> {
+    return this.usersRepository.find({
+      where: { status: UserStatusesEnum.PERSONALITY_VERIFICATION },
+      take: payload.limit,
+      skip: payload.offset,
+    });
+  }
+
+  async approveUsersById(payload: ApproveUsersIdentityDto): Promise<void> {
+    await this.usersRepository.update(payload.userIds, {
+      status: UserStatusesEnum.ACTIVE,
+    });
+  }
+
+  async getUserEmailsByIds(
+    payload: ApproveUsersIdentityDto,
+  ): Promise<UserEntity[]> {
+    return this.usersRepository.find({
+      where: { id: In(payload.userIds) },
+      select: ['email'],
+    });
   }
 }

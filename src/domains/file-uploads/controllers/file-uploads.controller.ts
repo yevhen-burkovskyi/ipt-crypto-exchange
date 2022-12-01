@@ -21,6 +21,7 @@ import { UserContext } from 'src/core/types/user-context.type';
 import { MainRoutingEnum } from 'src/core/enums/main-routing.enum';
 import { BasicResponse } from 'src/core/utils/dtos/responses/basic.response';
 import { FileUploadOnceGuard } from 'src/core/guards/file-upload-once.guard';
+import { FILE_FIELD_NAME } from 'src/core/consts/file.consts';
 
 @Controller(MainRoutingEnum.FILE_UPLOADS)
 export class FileUploadsController {
@@ -30,7 +31,7 @@ export class FileUploadsController {
   @SetUserStatus(UserStatusesEnum.PERSONALITY_VERIFICATION)
   @UseGuards(RolesGuard, UserStatusesGuard, FileUploadOnceGuard)
   @Post()
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(FileInterceptor(FILE_FIELD_NAME))
   async upload(
     @UploadedFile(FileValidationPipe)
     file: Express.Multer.File,

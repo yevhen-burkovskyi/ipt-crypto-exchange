@@ -42,6 +42,7 @@ import { Pagination } from 'src/core/types/pagination.type';
 import { UsersResponse } from 'src/domains/users/dtos/responses/users.response';
 import { ApproveUsersIdentitySchema } from 'src/domains/users/dtos/schemas/approve-users-identity.schema';
 import { ApproveUsersIdentityDto } from 'src/domains/users/dtos/dto/approve-users-identity.dto';
+import { UsersRoutingEnum } from 'src/core/enums/users-routing.enum';
 
 @Controller(MainRoutingEnum.USERS)
 @UseInterceptors(UsersInterceptor)
@@ -50,7 +51,7 @@ export class UsersController {
 
   @Public()
   @UseGuards(UniqueEmailGuard)
-  @Post('registration')
+  @Post(UsersRoutingEnum.REGISTRATION)
   async registration(
     @Body(new SchemaValidatePipe(RegistrationSchema))
     registrationDto: RegistrationDto,
@@ -59,7 +60,7 @@ export class UsersController {
   }
 
   @Public()
-  @Post('login')
+  @Post(UsersRoutingEnum.LOGIN)
   @HttpCode(HttpStatus.OK)
   async login(
     @Body(new SchemaValidatePipe(LoginSchema))
@@ -71,7 +72,7 @@ export class UsersController {
   @SetRole(RolesEnum.USER)
   @SetUserStatus(UserStatusesEnum.I_AM_NEW_HERE)
   @UseGuards(RolesGuard, UserStatusesGuard)
-  @Patch('personal-information')
+  @Patch(UsersRoutingEnum.PERSONAL_INFORMATION)
   async personalInformation(
     @Body(new SchemaValidatePipe(PersonalInformationSchema))
     personalInformationDto: PersonalInformationDto,
@@ -88,7 +89,7 @@ export class UsersController {
   @SetRole(RolesEnum.USER)
   @SetUserStatus(UserStatusesEnum.EMAIL_VERIFICATION)
   @UseGuards(RolesGuard, UserStatusesGuard, SendEmailTimeout)
-  @Get('send-email-approve')
+  @Get(UsersRoutingEnum.SEND_EMAIL_APPROVE)
   async sendEmailApprove(
     @Context() userContext: UserContext,
   ): Promise<BasicResponse> {
@@ -96,7 +97,7 @@ export class UsersController {
   }
 
   @Public()
-  @Get('approve-email')
+  @Get(UsersRoutingEnum.APPROVE_EMAIL)
   async approveEmail(
     @Query(new SchemaValidatePipe(ApproveEmailSchema))
     approveEmailDto: ApproveEmailDto,
@@ -107,7 +108,7 @@ export class UsersController {
   @SetRole(RolesEnum.ADMIN, RolesEnum.MANAGER)
   @SetUserStatus(UserStatusesEnum.ACTIVE)
   @UseGuards(RolesGuard, UserStatusesGuard)
-  @Get('get-waiting-users-for-approve')
+  @Get(UsersRoutingEnum.GET_WAITING_USERS_FOR_APPROVE)
   async getWaitingUsersForApprove(
     @Query(new SchemaValidatePipe(GetWaitingUsersForApproveSchema))
     pagination: Pagination,
@@ -118,7 +119,8 @@ export class UsersController {
   @SetRole(RolesEnum.ADMIN, RolesEnum.MANAGER)
   @SetUserStatus(UserStatusesEnum.ACTIVE)
   @UseGuards(RolesGuard, UserStatusesGuard)
-  @Post('approve-users-identity')
+  @Post(UsersRoutingEnum.APPROVE_USERS_IDENTITY)
+  @HttpCode(HttpStatus.OK)
   async approveUsersIdentity(
     @Body(new SchemaValidatePipe(ApproveUsersIdentitySchema))
     approveUsersIdentityDto: ApproveUsersIdentityDto,

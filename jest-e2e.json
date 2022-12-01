@@ -3,6 +3,12 @@
   "rootDir": ".",
   "testEnvironment": "node",
   "testRegex": ".e2e-spec.ts$",
+  "modulePaths": [
+    "<rootDir>"
+  ],
+  "setupFiles": [
+    "<rootDir>/src/core/lib/jest/set-env-vars.js"
+  ],
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"
   }

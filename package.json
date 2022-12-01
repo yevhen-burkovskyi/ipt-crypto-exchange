@@ -18,8 +18,8 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json",
-    "startLocal": "cross-env NODE_ENV=local cross-env NODE_CONFIG_DIR=/opt/configuration npm run start",
+    "test:e2e": "cross-env NODE_ENV=test cross-env NODE_CONFIG_DIR=/opt/configuration jest --config ./jest-e2e.json",
+    "startLocal": "cross-env NODE_ENV=local cross-env NODE_CONFIG_DIR=/opt/configuration npm run local-env npm run start",
     "typeorm": "typeorm-ts-node-commonjs",
     "migration": "npm run typeorm migration:run"
   },
@@ -32,6 +32,7 @@
     "@nestjs/passport": "^9.0.0",
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/typeorm": "^9.0.1",
+    "@types/pg": "^8.6.5",
     "bcrypt": "^5.1.0",
     "cache-manager": "^5.1.1",
     "cross-env": "^7.0.3",

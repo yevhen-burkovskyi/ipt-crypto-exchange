@@ -21,9 +21,9 @@ export class UsersInterceptor<T> implements NestInterceptor<T, Response<T>> {
   ): Observable<Response<T>> {
     return next.handle().pipe(
       map((data) => {
-        if (data?.hasOwnProperty('user')) {
+        if (data?.hasOwnProperty('user') && data.user) {
           return { ...data, user: this.excludeHiddenFields(data.user) };
-        } else if (data?.hasOwnProperty('users')) {
+        } else if (data?.hasOwnProperty('users') && data.users) {
           const users = [];
           for (const user of data.users) {
             users.push(this.excludeHiddenFields(user));
@@ -42,6 +42,8 @@ export class UsersInterceptor<T> implements NestInterceptor<T, Response<T>> {
       email: user.email,
       profile: user.profile,
       status: user.status,
+      role: user.role,
+      fileUploads: user.fileUploads,
     };
   }
 }

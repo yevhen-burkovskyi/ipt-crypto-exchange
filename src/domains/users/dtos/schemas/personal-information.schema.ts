@@ -1,7 +1,8 @@
 import * as Joi from 'joi';
+import { ServerUtils } from 'src/core/utils/server.utils';
 
 const now = Date.now();
-const cutoffDate = new Date(now - 1000 * 60 * 60 * 24 * 365 * 18);
+const cutoffDate = new Date(now - ServerUtils.take18YearsInMs());
 
 export const PersonalInformationSchema = Joi.object({
   firstName: Joi.string().required(),

@@ -15,4 +15,8 @@ export class ServerUtils {
   static generateManagerPassword(): string {
     return generate(PasswordParams);
   }
+
+  static take18YearsInMs(): number {
+    return 1000 * 60 * 60 * 24 * 365 * 18;
+  }
 }

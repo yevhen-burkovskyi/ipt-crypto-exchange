@@ -17,7 +17,7 @@ export const ConfigSchema = Joi.object({
     database: Joi.string().required(),
     autoLoadEntities: Joi.boolean().required(),
     synchronize: Joi.boolean().required(),
-    migrationsRun: Joi.boolean().required(),
+    migrationsRun: Joi.boolean().optional(),
   }).required(),
   security: Joi.object({
     saltRounds: Joi.number().required(),
@@ -31,12 +31,6 @@ export const ConfigSchema = Joi.object({
   nodemailer: Joi.object({
     user: Joi.string().required(),
     password: Joi.string().required(),
-  }).required(),
-  redis: Joi.object({
-    server: Joi.string().required(),
-    port: Joi.number().required(),
-    db: Joi.number().required(),
-    auth: Joi.string().required(),
   }).required(),
   timeouts: Joi.object({
     emailConfirm: Joi.number().required(),

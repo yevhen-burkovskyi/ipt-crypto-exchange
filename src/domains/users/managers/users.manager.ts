@@ -94,6 +94,7 @@ export class UsersManager {
 
     this.smtpManager.sendEmailConfirmation(sendEmailConfirmationDto);
     await this.cacheManager.saveEmailTimeout(userId);
+
     return ServerUtils.createCommonResponse(
       UserResponsesEnum.EMAIL,
       HttpStatus.OK,
